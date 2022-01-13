@@ -84,15 +84,16 @@ function addUser(user){
     users['users_list'].push(user);
 }
 
-app.delete('/users', (req, res) => {
-    const userToDelete = req.body;
-    deleteUser(userToDelete);
-    res.status(200).end();
+app.delete('/users/:id', (req, res) => {
+    const id = req.params['id'];
+    let result = findUserById(id);
+    if(result === undefined || result.length == 0)
+        res.status(404).send('Resource not found.');
+    else{
+        let index = users['users_list'].indexOf(result);
+        users['users_list'].splice(index,1);
+    }
 });
-
-function deleteUser(user){
-    users['users_list'].pop(user);
-}
 
 function findUserById(id) {
     return users['users_list'].find( (user) => user['id'] === id); // or line below
