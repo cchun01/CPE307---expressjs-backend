@@ -100,7 +100,7 @@ app.post('/users', (req, res) => {
     if(req.body.id === undefined){
         req.body.id = id;
         addUser(req.body);
-        res.status(201).end();
+        res.status(201).send(req.body.id).end();
     }
     else{
         addUser(userToAdd);
