@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const e = require('express');
 const app = express();
 const port = 5000;
 
@@ -76,10 +77,35 @@ app.get('/users/:id', (req, res) => {
     }
 });
 
+function makeid(length) {
+    var result           = '';
+    var characters       = 'abcdefghijklmnopqrstuvwxyz';
+    var charactersNum    = '0123456789';
+    var charactersLength = characters.length;
+    var charactersNumLength = charactersNum.length;
+    for ( var i = 0; i < length; i++ ) {
+        if(i<3){
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        else{
+            result += charactersNum.charAt(Math.floor(Math.random() * charactersNumLength));
+        }
+   }
+   return result;
+}
+
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.status(201).end();
+    const id = makeid(6);
+    if(req.body.id === undefined){
+        req.body.id = id;
+        addUser(req.body);
+        res.status(201).end();
+    }
+    else{
+        addUser(userToAdd);
+        res.status(201).end();
+    }
 });
 
 function addUser(user){
